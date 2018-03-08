@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
@@ -45,7 +46,11 @@ public class TransactionRepositoryPerformanceTest {
         Date before = new SimpleDateFormat("yyyy-MM-dd").parse("2018-03-06");
         Date after = new SimpleDateFormat("yyyy-MM-dd").parse("2018-03-07");
 
-        List<Transaction> transactions = repository.findAll(TransactionSpec.loggedBetween(before, after));
+        Specifications<Transaction> specifications =
+                Specifications.where(TransactionSpec.referenceNumber("e1751541-67f3-4311-ae5c-eb70177aebfd"));
+
+//        List<Transaction> transactions = repository.findAll(specifications.and(TransactionSpec.loggedBetween(before, after)));
+        List<Transaction> transactions = repository.findAll(specifications.and(TransactionSpec.loggedBetweenCustom(before, after)));
 
         System.out.println("Found: " + transactions.size());
     }

@@ -18,4 +18,12 @@ public class TransactionSpec {
                 after
         );
     }
+
+    public static Specification<Transaction> loggedBetweenCustom(Date before, Date after) {
+        return (root, query, cb) -> cb.between(
+                cb.function("TO_CUSTOM_DATE", Date.class, root.get("logTime")),
+                before,
+                after
+        );
+    }
 }
